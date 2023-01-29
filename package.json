@@ -1,0 +1,53 @@
+{
+  "name": "web-inspo",
+  "version": "0.31.0",
+  "private": true,
+  "description": "Autocomplete everything with AI",
+  "scripts": {
+    "build": "NODE_ENV=production BUILD_FOR_PROD=true node -r esbuild-register scripts/build.ts",
+    "build:dev": "node -r esbuild-register scripts/build.ts",
+    "tsc": "tsc --noEmit",
+    "dev": "nodemon --exec \"pnpm build:dev\" --watch pages --watch utils --watch components --watch templates --watch hooks --watch realms --watch background-utils --watch templates . -e ts,tsx,json,html"
+  },
+  "dependencies": {
+    "@babel/core": "7.20.12",
+    "@babel/plugin-syntax-typescript": "7.20.0",
+    "buffer": "6.0.3",
+    "esbuild": "0.17.5",
+    "esbuild-plugin-svgr": "1.0.1",
+    "esbuild-register": "3.4.2",
+    "esbuild-sass-plugin": "2.4.5",
+    "eslint": "8.33.0",
+    "eslint-config-prettier": "8.6.0",
+    "eslint-plugin-lodash": "7.4.0",
+    "eslint-plugin-react": "7.32.2",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "eventemitter3": "5.0.0",
+    "events": "3.3.0",
+    "formik": "2.2.9",
+    "framer-motion": "8.5.4",
+    "jsonc-parser": "3.2.0",
+    "lodash": "4.17.21",
+    "luxon": "3.2.1",
+    "nodemon": "2.0.20",
+    "prettier": "2.8.3",
+    "query-string": "8.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hot-toast": "2.4.0",
+    "react-router-dom": "6.8.0",
+    "typescript": "4.9.4",
+    "webextension-polyfill-ts": "^0.26.0",
+    "zod": "3.20.2"
+  },
+  "devDependencies": {
+    "@types/babel__core": "7.20.0",
+    "@types/jest": "29.4.0",
+    "@types/lodash": "4.14.191",
+    "@types/luxon": "3.2.0",
+    "@types/node": "18.11.18",
+    "@types/react": "18.0.27",
+    "@types/react-dom": "18.0.10",
+    "@types/yargs": "17.0.20"
+  }
+}

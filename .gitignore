@@ -1,0 +1,6 @@
+.DS_Store
+.idea/
+dist-dev/
+dist-prod/
+extension-build/
+node_modules/
