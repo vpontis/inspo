@@ -88,10 +88,12 @@ async function buildTs(manifestVersion: ManifestVersion): Promise<void> {
     sourcemap: "external",
     metafile: true,
     plugins: [
+      // This plugin says it relies on an old version of esbuild...
+      // https://github.com/glromeo/esbuild-sass-plugin/blob/main/package.json
       sassPlugin({
         type: "css-text",
         style: production ? "compressed" : "expanded",
-      }),
+      }) as any,
     ],
     define: {
       "process.env.SENTRY_RELEASE": production ? `"${getGitHash()}"` : `""`,

@@ -1,8 +1,7 @@
 {
   "name": "web-inspo",
-  "version": "0.31.0",
+  "version": "0.0.42",
   "private": true,
-  "description": "Autocomplete everything with AI",
   "scripts": {
     "build": "NODE_ENV=production BUILD_FOR_PROD=true node -r esbuild-register scripts/build.ts",
     "build:dev": "node -r esbuild-register scripts/build.ts",
@@ -12,8 +11,6 @@
   "dependencies": {
     "@babel/core": "7.20.12",
     "@babel/plugin-syntax-typescript": "7.20.0",
-    "@types/papaparse": "^5.3.7",
-    "buffer": "6.0.3",
     "esbuild": "0.17.5",
     "esbuild-plugin-svgr": "1.0.1",
     "esbuild-register": "3.4.2",
@@ -39,7 +36,7 @@
     "react-hot-toast": "2.4.0",
     "react-router-dom": "6.8.0",
     "typescript": "4.9.4",
-    "webextension-polyfill-ts": "^0.26.0",
+    "webextension-polyfill-ts": "0.26.0",
     "zod": "3.20.2"
   },
   "devDependencies": {
@@ -48,6 +45,7 @@
     "@types/lodash": "4.14.191",
     "@types/luxon": "3.2.0",
     "@types/node": "18.11.18",
+    "@types/papaparse": "5.3.7",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
     "@types/yargs": "17.0.20"
