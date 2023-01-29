@@ -2,6 +2,7 @@ import * as z from "zod";
 
 const GetFontsResponse = z.object({
   __type: z.literal("get-fonts-response"),
+  host: z.string(),
   fonts: z.array(
     z.object({
       name: z.string(),

@@ -1,5 +1,5 @@
 {
-  "name": "Web Inspo",
+  "name": "Inspo",
   "permissions": ["storage", "tabs", "alarms", "webNavigation"],
   "background": {
     "service_worker": "realms/background.js"

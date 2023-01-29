@@ -32,23 +32,26 @@ const requestFonts = async () => {
 const setupListener = async ({
   onFonts,
 }: {
-  onFonts: (fonts: Fonts) => unknown;
+  onFonts: (
+    data: ExtensionMessage & { __type: "get-fonts-response" }
+  ) => unknown;
 }) => {
   await browser.runtime.onMessage.addListener((rawMessage) => {
-    console.log("rawmessage", rawMessage);
     const message = ExtensionMessageZ.safeParse(rawMessage);
 
     if (message.success && message.data.__type === "get-fonts-response") {
-      onFonts(message.data.fonts);
+      onFonts(message.data);
     }
   });
 };
 
 function PopupPage() {
-  const [fonts, setFonts] = useState<Fonts | null>(null);
+  const [state, setState] = useState<{ fonts: Fonts; host: string } | null>(
+    null
+  );
 
   useOnMount(() => {
-    setupListener({ onFonts: setFonts });
+    setupListener({ onFonts: setState });
     requestFonts();
   });
 
@@ -70,14 +73,17 @@ function PopupPage() {
       }}
     >
       <div className="p-3">
-        {!fonts && <div>Loading...</div>}
+        {!state && <div>Loading...</div>}
 
-        {fonts && fonts.length === 0 && <div>No fonts found</div>}
-        {fonts && fonts.length > 0 && (
+        {state && (
           <div
             style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
           >
-            {fonts.map((f) => {
+            <div className={"mono text-lg break-all"}>{state.host}</div>
+
+            {state.fonts.length === 0 && <div>No fonts found</div>}
+
+            {state.fonts.map((f) => {
               const parsed = Papa.parse(f.name).data as string[][];
               const names = parsed[0];
 

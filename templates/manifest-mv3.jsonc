@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "action": {
-    "default_title": "Web Inspo",
+    "default_title": "Inspo",
     "default_icon": "icon-256.png",
     "default_popup": "popup.html"
   }

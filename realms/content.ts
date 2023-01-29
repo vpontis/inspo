@@ -35,6 +35,7 @@ const listenToPopup = () => {
     const message: ExtensionMessage = {
       __type: "get-fonts-response",
       fonts,
+      host: window.location.host,
     };
 
     browser.runtime.sendMessage(message);
@@ -42,13 +43,7 @@ const listenToPopup = () => {
 };
 
 const main = () => {
-  console.log("Do something... Content script");
   listenToPopup();
-};
-
-// @ts-ignore
-const sendBackground = async (request: ExtensionMessage): Promise<string> => {
-  return await browser.runtime.sendMessage(request);
 };
 
 main();

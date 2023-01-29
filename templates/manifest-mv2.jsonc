@@ -2,6 +2,6 @@
   "manifest_version": 2,
   "browser_action": {
     "default_icon": "icon-256.png",
-    "default_title": "Web Inspo"
+    "default_title": "Inspo"
   }
 }
