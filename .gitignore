@@ -4,3 +4,4 @@ dist-dev/
 dist-prod/
 extension-build/
 node_modules/
+zips/
