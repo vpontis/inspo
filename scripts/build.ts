@@ -7,6 +7,7 @@ import { DateTime } from "luxon";
 import child_process from "node:child_process";
 import fs from "node:fs";
 import fsPromises from "node:fs/promises";
+import { sassPlugin } from "esbuild-sass-plugin";
 
 declare global {
   type Process = {
@@ -86,6 +87,12 @@ async function buildTs(manifestVersion: ManifestVersion): Promise<void> {
     target: "safari15",
     sourcemap: "external",
     metafile: true,
+    plugins: [
+      sassPlugin({
+        type: "css-text",
+        style: production ? "compressed" : "expanded",
+      }),
+    ],
     define: {
       "process.env.SENTRY_RELEASE": production ? `"${getGitHash()}"` : `""`,
       "process.env.NODE_ENV": `"${env}"`,

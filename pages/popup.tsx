@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Papa from "papaparse";
 import { browser } from "webextension-polyfill-ts";
 import { createPage } from "../utils/create-page";
 import { ExtensionMessage, ExtensionMessageZ, Fonts } from "../utils/messages";
@@ -68,22 +69,41 @@ function PopupPage() {
         // width: isFullscreen ? `var(--popup-max-width)` : `var(--popup-width)`,
       }}
     >
-      <div>Hi this is the popup.</div>
+      <div className="p-3">
+        {!fonts && <div>Loading...</div>}
 
-      {!fonts && <div>Loading...</div>}
+        {fonts && fonts.length === 0 && <div>No fonts found</div>}
+        {fonts && fonts.length > 0 && (
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
+          >
+            {fonts.map((f) => {
+              const parsed = Papa.parse(f.name).data as string[][];
+              const names = parsed[0];
 
-      {fonts && fonts.length === 0 && <div>No fonts found</div>}
-      {fonts && fonts.length > 0 && (
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
-        >
-          {fonts.map((f) => (
-            <div key={f.name}>
-              {f.name} - {f.count}
-            </div>
-          ))}
-        </div>
-      )}
+              const primary = names[0];
+              const secondary = names.slice(1);
+
+              return (
+                <div key={f.name}>
+                  <div className={"flex-center spread"}>
+                    <div className={"font-weight-medium"}>{primary}</div>
+                    <div className={"text-secondary-alpha"}>
+                      {f.count.toLocaleString()}
+                    </div>
+                  </div>
+
+                  {secondary.length > 0 && (
+                    <div className={"text-secondary-alpha text-sm"}>
+                      {secondary.join(", ")}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

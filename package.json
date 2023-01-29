@@ -12,6 +12,7 @@
   "dependencies": {
     "@babel/core": "7.20.12",
     "@babel/plugin-syntax-typescript": "7.20.0",
+    "@types/papaparse": "^5.3.7",
     "buffer": "6.0.3",
     "esbuild": "0.17.5",
     "esbuild-plugin-svgr": "1.0.1",
@@ -30,6 +31,7 @@
     "lodash": "4.17.21",
     "luxon": "3.2.1",
     "nodemon": "2.0.20",
+    "papaparse": "^5.3.2",
     "prettier": "2.8.3",
     "query-string": "8.1.0",
     "react": "18.2.0",
