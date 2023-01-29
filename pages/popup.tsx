@@ -1,27 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { browser } from "webextension-polyfill-ts";
-import { createRoot } from "react-dom/client";
+import { createPage } from "../utils/create-page";
 
-const createPage = () => {
-  const root = document.getElementById("root")!;
-  const reactRoot = createRoot(root);
-
-  reactRoot.render(<PopupPage />);
-};
-createPage();
+createPage(<PopupPage />);
 
 const MINIMUM_POPUP_SIZE = {
-  minWidth: 400,
-  minHeight: 400,
+  minWidth: 200,
+  maxWidth: 400,
+  minHeight: 300,
+  maxHeight: 500,
 };
 
 function PopupPage() {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  const [state, setState] = useState<any>(null);
+
   useEffect(() => {
-    browser.tabs.getCurrent().then((tab) => {
-      setIsFullscreen(Boolean(tab));
-    });
+    async function func() {
+      const curr = await browser.tabs.getCurrent();
+      // `tab` will either be a `tabs.Tab` instance or `undefined`.
+      let [tab] = await browser.tabs.query({
+        active: true,
+        lastFocusedWindow: true,
+      });
+
+      setState(tab);
+      console.log(curr);
+    }
+
+    func();
   });
 
   return (
@@ -40,7 +48,9 @@ function PopupPage() {
         marginRight: "auto",
       }}
     >
-      <div>Hi</div>
+      <div>Hi this is the popup.</div>
+
+      <pre>{JSON.stringify(state || "HMM", null, 2)}</pre>
     </div>
   );
 }
