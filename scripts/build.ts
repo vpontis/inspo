@@ -145,7 +145,7 @@ async function createZip(manifestVersion: ManifestVersion): Promise<void> {
   const name = getZipFileName(manifestVersion);
 
   // We pass in `-x *.map` to exclude JS sourcemaps which should go to Sentry but not to browsers
-  child_process.execSync(`(cd ${outdir} && zip -r ../../${name} . -x "*.map")`);
+  child_process.execSync(`(cd ${outdir} && zip -r ../../zips/${name} . -x "*.map")`);
 }
 
 async function copyImages(manifestVersion: ManifestVersion): Promise<void> {
