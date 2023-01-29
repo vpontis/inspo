@@ -1,8 +1,24 @@
 import * as z from "zod";
 
-export const MessageZ = z.object({
-  __type: z.literal("message-1"),
-  label: z.string().nullable(),
+const GetFontsResponse = z.object({
+  __type: z.literal("get-fonts-response"),
+  fonts: z.array(
+    z.object({
+      name: z.string(),
+      count: z.number(),
+    })
+  ),
 });
 
-export type Message = z.infer<typeof MessageZ>;
+export type Fonts = z.infer<typeof GetFontsResponse>["fonts"];
+
+const GetFontsRequest = z.object({
+  __type: z.literal("get-fonts-request"),
+});
+
+export const ExtensionMessageZ = z.discriminatedUnion("__type", [
+  GetFontsResponse,
+  GetFontsRequest,
+]);
+
+export type ExtensionMessage = z.infer<typeof ExtensionMessageZ>;

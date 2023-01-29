@@ -1,35 +1,54 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { browser } from "webextension-polyfill-ts";
 import { createPage } from "../utils/create-page";
+import { ExtensionMessage, ExtensionMessageZ, Fonts } from "../utils/messages";
+import { useOnMount } from "../hooks/useOnMount";
 
 createPage(<PopupPage />);
 
 const MINIMUM_POPUP_SIZE = {
-  minWidth: 200,
-  maxWidth: 400,
+  minWidth: 320,
+  maxWidth: 600,
   minHeight: 300,
   maxHeight: 500,
 };
 
-function PopupPage() {
-  const [isFullscreen, setIsFullscreen] = useState(false);
+const requestFonts = async () => {
+  const [tab] = await browser.tabs.query({
+    active: true,
+    lastFocusedWindow: true,
+  });
 
-  const [state, setState] = useState<any>(null);
+  const message: ExtensionMessage = {
+    __type: "get-fonts-request",
+  };
 
-  useEffect(() => {
-    async function func() {
-      const curr = await browser.tabs.getCurrent();
-      // `tab` will either be a `tabs.Tab` instance or `undefined`.
-      let [tab] = await browser.tabs.query({
-        active: true,
-        lastFocusedWindow: true,
-      });
+  if (tab.id) {
+    await browser.tabs.sendMessage(tab.id, message);
+  }
+};
 
-      setState(tab);
-      console.log(curr);
+const setupListener = async ({
+  onFonts,
+}: {
+  onFonts: (fonts: Fonts) => unknown;
+}) => {
+  await browser.runtime.onMessage.addListener((rawMessage) => {
+    console.log("rawmessage", rawMessage);
+    const message = ExtensionMessageZ.safeParse(rawMessage);
+
+    if (message.success && message.data.__type === "get-fonts-response") {
+      onFonts(message.data.fonts);
     }
+  });
+};
 
-    func();
+function PopupPage() {
+  const [fonts, setFonts] = useState<Fonts | null>(null);
+
+  useOnMount(() => {
+    setupListener({ onFonts: setFonts });
+    requestFonts();
   });
 
   return (
@@ -40,17 +59,31 @@ function PopupPage() {
 
         height: "100%",
 
+        marginLeft: "auto",
+        marginRight: "auto",
+
         // The popup can open in full screen if the browser is in full screen
         // so we want to give it a little more breathing room without taking up
         // the full screen
-        width: isFullscreen ? `var(--popup-max-width)` : `var(--popup-width)`,
-        marginLeft: "auto",
-        marginRight: "auto",
+        // width: isFullscreen ? `var(--popup-max-width)` : `var(--popup-width)`,
       }}
     >
       <div>Hi this is the popup.</div>
 
-      <pre>{JSON.stringify(state || "HMM", null, 2)}</pre>
+      {!fonts && <div>Loading...</div>}
+
+      {fonts && fonts.length === 0 && <div>No fonts found</div>}
+      {fonts && fonts.length > 0 && (
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
+        >
+          {fonts.map((f) => (
+            <div key={f.name}>
+              {f.name} - {f.count}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
