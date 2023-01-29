@@ -8,9 +8,16 @@ const getFonts = (): Fonts => {
   const all = document.getElementsByTagName("*");
   for (const node of all) {
     const font = window.getComputedStyle(node).fontFamily;
+
+    // This is used on <meta> / <head> / other tags
+    if (font === "Times") {
+      continue;
+    }
+
     if (!fontMap.has(font)) {
       fontMap.set(font, 0);
     }
+
     fontMap.set(font, fontMap.get(font) + 1);
   }
 
@@ -24,10 +31,6 @@ const getFonts = (): Fonts => {
 // Receive message from Popup
 const listenToPopup = () => {
   browser.runtime.onMessage.addListener(function (request, sender) {
-    console.log(
-      JSON.stringify({ request, sender, message: "got message...." }, null, 2)
-    );
-
     const fonts = getFonts();
     const message: ExtensionMessage = {
       __type: "get-fonts-response",
